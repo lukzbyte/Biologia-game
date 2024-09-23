@@ -1,8 +1,6 @@
-
 import time
 import os
 import sys
-import tkinter as tk
 import random
 from colorama import Fore as cor, Style as estilo
 
@@ -27,19 +25,23 @@ jogo_ativado = 1
 
 while jogo_ativado == 1:
     while True:
-        print_bonito("Quantos jogadores vai jogar (max. 4)\n")
+        print_bonito("Quantos jogadores vai jogar (max. 7)\n")
         qnt_de_jogadores = input()
 
-        if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 4:
+        if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 7:
             for i in range(int(qnt_de_jogadores)):
                 print_bonito(f"Digite o nome do jogador {i+1}: ")
                 jogador_nome = input()
-                jogador = {'Nome': jogador_nome, 'entrada': i+1}
+                cor_jogador = random.choice(cores_aleatorias)
+                while any(jogador['cor'] == cor_jogador for jogador in jogadores_participando):
+                    cor_jogador = random.choice(cores_aleatorias)
+                jogador = {'Nome': jogador_nome, 'entrada': i+1, 'cor':cor_jogador}
                 jogadores_participando.append(jogador)
             break
         else:
             input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
             os.system('cls')
 
+    os.system('cls')
     for jogador in jogadores_participando:
-        print(f"Jogado: {jogador['Nome']} |Sua rodada: {jogador['entrada']}")
+        print(jogador['cor']+f"Jogado: {jogador['Nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
