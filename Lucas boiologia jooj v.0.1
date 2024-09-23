@@ -1,0 +1,22 @@
+
+jogadores = []
+
+# ...
+
+while True:
+    Qntd_Players = input('Informe quantos jogadores irão jogar (numero maximo de 7 jogadores): ')
+    if Qntd_Players.isdigit():
+        Qntd_Players = int(Qntd_Players)
+        if Qntd_Players > 7:
+            print('Erro: número de jogadores deve ser menor ou igual a 7. Tente novamente.')
+        elif 1 <= Qntd_Players <= 7:
+            break
+
+    else:
+        print('Erro: entrada inválida. Tente novamente.')
+
+for i in range(Qntd_Players):
+    nome = input(f'Digite o nome do Player {i+1}: ')
+    jogadores.append(nome)
+
+print('\nOk', jogadores, 'iremos para as perguntas agora.')
