@@ -4,7 +4,7 @@ import sys
 import random
 from colorama import Fore as cor, Style as estilo
 
-os.system('cls')
+
 sys.set_int_max_str_digits(10000000)
 
 cores_aleatorias = [cor.BLACK, cor.BLUE, cor.RED, cor.GREEN, cor.YELLOW, cor.CYAN, cor.MAGENTA]
@@ -25,6 +25,7 @@ jogo_ativado = 1
 
 while jogo_ativado == 1:
     while True:
+        os.system('cls')
         print_bonito("Quantos jogadores vai jogar (max. 7)\n")
         qnt_de_jogadores = input()
 
@@ -32,16 +33,34 @@ while jogo_ativado == 1:
             for i in range(int(qnt_de_jogadores)):
                 print_bonito(f"Digite o nome do jogador {i+1}: ")
                 jogador_nome = input()
+                entrada = random.randint(1,7)
                 cor_jogador = random.choice(cores_aleatorias)
+
+                while any(jogador['entrada'] == entrada for jogador in jogadores_participando):
+                    entrada = random.randint(1,7)
+
                 while any(jogador['cor'] == cor_jogador for jogador in jogadores_participando):
                     cor_jogador = random.choice(cores_aleatorias)
-                jogador = {'Nome': jogador_nome, 'entrada': i+1, 'cor':cor_jogador}
+
+                jogador = {'Nome': jogador_nome, 'entrada': entrada, 'cor':cor_jogador}
                 jogadores_participando.append(jogador)
-            break
+            os.system('cls')
+            for jogador in jogadores_participando:
+                print(jogador['cor']+f"Jogador: {jogador['Nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
+            print_bonito("Os dados estão corretos?\n")
+            print_bonito(cor.YELLOW+("(1. Sim) (2. Não)\n"))
+            decisao = input(estilo.RESET_ALL)
+            if decisao == "1":
+                break
+            elif decisao == '2':
+                jogadores_participando.clear()
+                
+            
         else:
             input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
             os.system('cls')
+    input("SEXO, toda noite é SEXO, com minha mão é SEXO, quando se chega, eu ativo o modo SEXO")
 
-    os.system('cls')
-    for jogador in jogadores_participando:
-        print(jogador['cor']+f"Jogado: {jogador['Nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
+    
+
+
