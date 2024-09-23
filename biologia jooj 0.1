@@ -1,0 +1,45 @@
+
+import time
+import os
+import sys
+import tkinter as tk
+import random
+from colorama import Fore as cor, Style as estilo
+
+os.system('cls')
+sys.set_int_max_str_digits(10000000)
+
+cores_aleatorias = [cor.BLACK, cor.BLUE, cor.RED, cor.GREEN, cor.YELLOW, cor.CYAN, cor.MAGENTA]
+
+def print_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+
+def input_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+    input()
+
+jogadores_participando = []
+jogo_ativado = 1
+
+while jogo_ativado == 1:
+    while True:
+        print_bonito("Quantos jogadores vai jogar (max. 4)\n")
+        qnt_de_jogadores = input()
+
+        if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 4:
+            for i in range(int(qnt_de_jogadores)):
+                print_bonito(f"Digite o nome do jogador {i+1}: ")
+                jogador_nome = input()
+                jogador = {'Nome': jogador_nome, 'entrada': i+1}
+                jogadores_participando.append(jogador)
+            break
+        else:
+            input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
+            os.system('cls')
+
+    for jogador in jogadores_participando:
+        print(f"Jogado: {jogador['Nome']} |Sua rodada: {jogador['entrada']}")
