@@ -1,0 +1,153 @@
+import time
+import os
+import sys
+import random
+from colorama import Fore as cor, Style as estilo
+
+
+sys.set_int_max_str_digits(10000000)
+
+cores_aleatorias = [cor.BLACK, cor.BLUE, cor.RED, cor.GREEN, cor.YELLOW, cor.CYAN, cor.MAGENTA]
+
+def print_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+
+def input_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+    input()
+
+jogadores_participando = []
+jogo_ativado = 1
+
+
+os.system('cls')
+input(cor.LIGHTGREEN_EX+"BIOLOGIA THE GAME (fazer em ascii)")
+
+while jogo_ativado == 1:
+    while True:
+        os.system('cls')
+        print_bonito(estilo.RESET_ALL+"Quantos jogadores vai jogar (max. 7)?\n")
+        qnt_de_jogadores = input()
+
+        if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 7:
+            for i in range(int(qnt_de_jogadores)):
+                print_bonito(f"Digite o nome do jogador {i+1}: ")
+                jogador_nome = input()
+                entrada = random.randint(1,7)
+                cor_jogador = random.choice(cores_aleatorias)
+                pontuacao = 0
+
+                while any(jogador['entrada'] == entrada for jogador in jogadores_participando):
+                    entrada = random.randint(1,7)
+
+                while any(jogador['cor'] == cor_jogador for jogador in jogadores_participando):
+                    cor_jogador = random.choice(cores_aleatorias)
+
+                jogador = {'nome': jogador_nome, 'entrada': entrada, 'cor':cor_jogador, 'pontuacao':pontuacao}
+                jogadores_participando.append(jogador)
+            os.system('cls')
+            for jogador in jogadores_participando:
+                print(jogador['cor']+f"Jogador: {jogador['nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
+            print_bonito("\nOs dados estão corretos?\n")
+            print_bonito(cor.YELLOW+("(1. Sim) (2. Não)\n"))
+            decisao = input(estilo.RESET_ALL)
+            if decisao == "1":
+                break
+            elif decisao == '2':
+                jogadores_participando.clear()
+                
+            
+        else:
+            input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
+            os.system('cls')
+    jogadores_participando = sorted(jogadores_participando, key=lambda x: x['entrada'])
+    gameplay = 1
+
+    os.system('cls')
+    print_bonito(cor.CYAN+"Regras (fazer em ascii)\n")
+    print_bonito(estilo.RESET_ALL+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
+    print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
+    input_bonito(f"\nPerguntas {cor.GREEN +"Facieis"+ estilo.RESET_ALL} = 2 pontos\nPerguntas {cor.YELLOW +"Médias"+ estilo.RESET_ALL} = 4 pontos\nPerguntas {cor.RED +"Difíceis"+ estilo.RESET_ALL} = 6 pontos\n(Pressione Enter)")
+
+    while gameplay == 1:
+        os.system('cls')
+        rolar_dado = 0
+        for jogador in jogadores_participando:
+            selecao_de_dificuldade = random.randint(1,3)
+            print_bonito(f"A pergunta sorteada possui dificuldade.............\n")
+            if selecao_de_dificuldade == 1:
+                print(f"{cor.GREEN +"Facil (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                pontos_totais = 2
+            elif  selecao_de_dificuldade == 2:
+                print(f"{cor.YELLOW +"Média (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                pontos_totais = 4
+            elif selecao_de_dificuldade == 3:
+                print(f"{cor.RED +"Difícil (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                pontos_totais = 6
+
+            print_bonito(f"Você, jogador {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}, gostaria de rolar um dado para multiplicar seu ganho de pontos?\n")
+            print_bonito(cor.YELLOW+"(1. Sim) (2. Não)\n")
+            decisao = input(estilo.RESET_ALL)
+            os.system('cls')
+            if decisao == "1":
+                rolar_dado = random.randint(1,6)
+                pontos_totais *= rolar_dado
+                print_bonito(f"O jogador {jogador['cor']+jogador['nome'] + estilo.RESET_ALL} Rolou um {rolar_dado}\n")
+            input_bonito(f"O jogador pode ganhar até {pontos_totais} pontos")
+            os.system('cls')
+            
+            selecao_de_perguntas = (1, 10) # variavel pra escolher a pergunta
+            if selecao_de_dificuldade == 1:
+                print_bonito(estilo.RESET_ALL+"Pergunta facil\n")
+                print_bonito(cor.YELLOW+"(1. reposta errada) (2. reposta certa)")
+                decisao = input(estilo.RESET_ALL)
+                print_bonito("E a resposta está...........")
+                if decisao == '2':
+                    jogador['pontuacao'] += pontos_totais
+                    print_bonito("Correta\n")
+                else:
+                    print_bonito("ERROU, errou feio errou rudi")
+                    if rolar_dado != 0:
+                        pontos_totais /= 2
+                        jogador['pontuacao'] += pontos_totais
+            elif  selecao_de_dificuldade == 2:
+                print_bonito(estilo.RESET_ALL+"Pergunta média\n")
+                print_bonito(cor.YELLOW+"(1. reposta certa) (2. reposta errada)")
+                decisao = input(estilo.RESET_ALL)
+                if decisao == '1':
+                    jogador['pontuacao'] += pontos_totais
+                    print_bonito("Correta\n")
+                else:
+                    print_bonito("ERROU, errou feio errou rudi")
+                    if rolar_dado != 0:
+                        pontos_totais /= 2
+                        jogador['pontuacao'] += pontos_totais
+            elif selecao_de_dificuldade == 3:
+                print_bonito(estilo.RESET_ALL+"Pergunta extremamente dificil e complicada\n")
+                print_bonito("Qual é a mistura de quero-quero com pica pau????\n")
+                print_bonito(cor.YELLOW+"(1. Não sei) (2. não existe) (3. QUERO PICA E QUERO PAU)")
+                decisao = input(estilo.RESET_ALL)
+                if decisao == '3':
+                    jogador['pontuacao'] += pontos_totais
+                    print_bonito("Correta\n")
+                else:
+                    print_bonito("ERROU, errou feio errou rudi")
+                    if rolar_dado != 0:
+                        pontos_totais /= 2
+                        jogador['pontuacao'] += pontos_totais
+            print_bonito(f"O jogador {jogador['nome']} possui {jogador['pontuacao']}\n")
+            input("Pressione Enter para continuar")
+
+            os.system('cls')
+        for jogador in jogadores_participando:
+            print_bonito(f"pontuação de {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}: {jogador['pontuacao']} \n")
+            if jogador['pontuacao'] >= 30:
+                os.system('cls')
+                jogadores_participando.sort(key=lambda x: x['pontuacao'], reverse=True)
+                jogador_vencedor = jogadores_participando[0]
+                print_bonito(f"Parabéns {jogador_vencedor['cor']+jogador_vencedor['nome'] + estilo.RESET_ALL}! \nVocê venceu o jogo com {jogador_vencedor['pontuacao']} pontos!")
+        input()
