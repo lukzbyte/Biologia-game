@@ -26,7 +26,7 @@ jogo_ativado = 1
 while jogo_ativado == 1:
     while True:
         os.system('cls')
-        print_bonito("Quantos jogadores vai jogar (max. 7)\n")
+        print_bonito("Quantos jogadores vai jogar (max. 7)?\n")
         qnt_de_jogadores = input()
 
         if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 7:
@@ -35,6 +35,7 @@ while jogo_ativado == 1:
                 jogador_nome = input()
                 entrada = random.randint(1,7)
                 cor_jogador = random.choice(cores_aleatorias)
+                pontuacao = 0
 
                 while any(jogador['entrada'] == entrada for jogador in jogadores_participando):
                     entrada = random.randint(1,7)
@@ -42,12 +43,12 @@ while jogo_ativado == 1:
                 while any(jogador['cor'] == cor_jogador for jogador in jogadores_participando):
                     cor_jogador = random.choice(cores_aleatorias)
 
-                jogador = {'Nome': jogador_nome, 'entrada': entrada, 'cor':cor_jogador}
+                jogador = {'nome': jogador_nome, 'entrada': entrada, 'cor':cor_jogador, 'pontuacao':pontuacao}
                 jogadores_participando.append(jogador)
             os.system('cls')
             for jogador in jogadores_participando:
-                print(jogador['cor']+f"Jogador: {jogador['Nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
-            print_bonito("Os dados estão corretos?\n")
+                print(jogador['cor']+f"Jogador: {jogador['nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
+            print_bonito("\nOs dados estão corretos?\n")
             print_bonito(cor.YELLOW+("(1. Sim) (2. Não)\n"))
             decisao = input(estilo.RESET_ALL)
             if decisao == "1":
@@ -59,7 +60,27 @@ while jogo_ativado == 1:
         else:
             input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
             os.system('cls')
-    input("SEXO, toda noite é SEXO, com minha mão é SEXO, quando se chega, eu ativo o modo SEXO")
+    jogadores_participando = sorted(jogadores_participando, key=lambda x: x['entrada'])
+    gameplay = 1
+    while gameplay == 1:
+        for jogador in jogadores_participando:
+            os.system('cls')
+            print_bonito(f"{jogador['cor']+jogador['nome']}\n")
+            print_bonito(estilo.RESET_ALL+"Pergunta extremamente dificil e complicada\n")
+            print_bonito("Qual é a mistura de quero-quero com pica pau????\n")
+            print_bonito(cor.YELLOW+"(1. Não sei) (2. não existe) (3. QUERO PICA E QUERO PAU)")
+            decisao = input(estilo.RESET_ALL)
+            if decisao == '3':
+                jogador['pontuacao'] += 10
+            else:
+                print_bonito("ERROU, errou feio errou rudi")
+                input()
+        os.system('cls')
+        for jogador in jogadores_participando:
+            print_bonito(f"pontuação de {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}: {jogador['pontuacao']} \n")
+            if jogador['pontuacao'] >= 30:
+                print_bonito(f"parabens {jogador['cor']+jogador['nome'] + estilo.RESET_ALL} Você venceu o jooj\n")
+        input()
 
     
 
