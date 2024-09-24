@@ -23,9 +23,35 @@ def input_bonito(texto, delay=0.001):
 jogadores_participando = []
 jogo_ativado = 1
 
+biologia_titulo = ("""
+   ____ ___ ___  _     ___   ____ ___    _      
+  | __ )_ _/ _ \| |   / _ \ / ___|_ _|  / \     
+  |  _ \| | | | | |  | | | | |  _ | |  / _ \    
+  | |_) | | |_| | |__| |_| | |_| || | / ___ \   
+ _|____/___\___/|_____\___/ \____|___/_/_ _\_\_ 
+|_   _| | | | ____|  / ___|  / \  |  \/  | ____|
+  | | | |_| |  _|   | |  _  / _ \ | |\/| |  _|  
+  | | |  _  | |___  | |_| |/ ___ \| |  | | |___ 
+  |_| |_| |_|_____|  \____/_/   \_\_|  |_|_____|""")
+facil_texto = (""" _____ __       _ _ 
+|  ___/_/_  ___(_) |
+| |_ / _` |/ __| | |
+|  _| (_| | (__| | |
+|_|  \__,_|\___|_|_|""")
+medio_texto = (""" __  __   __     _ _       
+|  \/  | /_/  __| (_) ___  
+| |\/| |/ _ \/ _` | |/ _ \ 
+| |  | |  __/ (_| | | (_) |
+|_|  |_|\___|\__,_|_|\___/ """)
+dificil_texto = (""" ____  _  __ __     _ _ 
+|  _ \(_)/ _/_/ ___(_) |
+| | | | | |_| |/ __| | |
+| |_| | |  _| | (__| | |
+|____/|_|_| |_|\___|_|_|""")
+
 
 os.system('cls')
-input(cor.LIGHTGREEN_EX+"BIOLOGIA THE GAME (fazer em ascii)")
+input(cor.LIGHTGREEN_EX+biologia_titulo)
 
 while jogo_ativado == 1:
     while True:
@@ -71,8 +97,8 @@ while jogo_ativado == 1:
     print_bonito(cor.CYAN+"Regras (fazer em ascii)\n")
     print_bonito(estilo.RESET_ALL+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
     print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
-    input_bonito(f"\nPerguntas {cor.GREEN +"Facieis"+ estilo.RESET_ALL} = 2 pontos\nPerguntas {cor.YELLOW +"Médias"+ estilo.RESET_ALL} = 4 pontos\nPerguntas {cor.RED +"Difíceis"+ estilo.RESET_ALL} = 6 pontos\n(Pressione Enter)")
-
+    input_bonito(f"\nPerguntas {cor.GREEN +"Fáceis"+ estilo.RESET_ALL} = 2 pontos\nPerguntas {cor.YELLOW +"Médias"+ estilo.RESET_ALL} = 4 pontos\nPerguntas {cor.RED +"Difíceis"+ estilo.RESET_ALL} = 6 pontos\n(Pressione Enter)")
+    rodadas = 1
     while gameplay == 1:
         os.system('cls')
         rolar_dado = 0
@@ -80,13 +106,13 @@ while jogo_ativado == 1:
             selecao_de_dificuldade = random.randint(1,3)
             print_bonito(f"A pergunta sorteada possui dificuldade.............\n")
             if selecao_de_dificuldade == 1:
-                print(f"{cor.GREEN +"Facil (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                print(f"{cor.GREEN +facil_texto+ estilo.RESET_ALL}\n")
                 pontos_totais = 2
             elif  selecao_de_dificuldade == 2:
-                print(f"{cor.YELLOW +"Média (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                print(f"{cor.YELLOW +medio_texto+ estilo.RESET_ALL}\n")
                 pontos_totais = 4
             elif selecao_de_dificuldade == 3:
-                print(f"{cor.RED +"Difícil (fazer em ascii)"+ estilo.RESET_ALL}\n")
+                print(f"{cor.RED +dificil_texto+ estilo.RESET_ALL}\n")
                 pontos_totais = 6
 
             print_bonito(f"Você, jogador {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}, gostaria de rolar um dado para multiplicar seu ganho de pontos?\n")
@@ -145,9 +171,10 @@ while jogo_ativado == 1:
             os.system('cls')
         for jogador in jogadores_participando:
             print_bonito(f"pontuação de {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}: {jogador['pontuacao']} \n")
-            if jogador['pontuacao'] >= 30:
+            if rodadas == 5:
                 os.system('cls')
                 jogadores_participando.sort(key=lambda x: x['pontuacao'], reverse=True)
                 jogador_vencedor = jogadores_participando[0]
                 print_bonito(f"Parabéns {jogador_vencedor['cor']+jogador_vencedor['nome'] + estilo.RESET_ALL}! \nVocê venceu o jogo com {jogador_vencedor['pontuacao']} pontos!")
+        rodadas += 1
         input()
