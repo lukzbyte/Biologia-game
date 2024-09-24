@@ -48,13 +48,21 @@ dificil_texto = (""" ____  _  __ __     _ _
 | | | | | |_| |/ __| | |
 | |_| | |  _| | (__| | |
 |____/|_|_| |_|\___|_|_|""")
-
+regras_texto = ("""
+ ____                          
+|  _ \ ___  __ _ _ __ __ _ ___ 
+| |_) / _ \/ _` | '__/ _` / __|
+|  _ <  __/ (_| | | | (_| \__ 
+|_| \_\___|\__, |_|  \__,_|___/
+           |___/               """)
 
 os.system('cls')
-input(cor.LIGHTGREEN_EX+biologia_titulo)
+print(cor.LIGHTGREEN_EX+biologia_titulo,"\n")
+input("               Pressione Enter")
 
 while jogo_ativado == 1:
     while True:
+        jogadores_participando.clear()
         os.system('cls')
         print_bonito(estilo.RESET_ALL+"Quantos jogadores vai jogar (max. 7)?\n")
         qnt_de_jogadores = input()
@@ -83,8 +91,7 @@ while jogo_ativado == 1:
             decisao = input(estilo.RESET_ALL)
             if decisao == "1":
                 break
-            elif decisao == '2':
-                jogadores_participando.clear()
+                
                 
             
         else:
@@ -94,7 +101,7 @@ while jogo_ativado == 1:
     gameplay = 1
 
     os.system('cls')
-    print_bonito(cor.CYAN+"Regras (fazer em ascii)\n")
+    print_bonito(f"{cor.CYAN+regras_texto}\n")
     print_bonito(estilo.RESET_ALL+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
     print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
     input_bonito(f"\nPerguntas {cor.GREEN +"Fáceis"+ estilo.RESET_ALL} = 2 pontos\nPerguntas {cor.YELLOW +"Médias"+ estilo.RESET_ALL} = 4 pontos\nPerguntas {cor.RED +"Difíceis"+ estilo.RESET_ALL} = 6 pontos\n(Pressione Enter)")
@@ -162,7 +169,7 @@ while jogo_ativado == 1:
                     print_bonito("Correta\n")
                 else:
                     print_bonito("ERROU, errou feio errou rudi")
-                    if rolar_dado != 0:
+                    if rolar_dado == 0:
                         pontos_totais /= 2
                         jogador['pontuacao'] += pontos_totais
             print_bonito(f"O jogador {jogador['nome']} possui {jogador['pontuacao']}\n")
