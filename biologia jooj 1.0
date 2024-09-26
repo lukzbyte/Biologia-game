@@ -21,14 +21,14 @@ def input_bonito(texto, delay=0.001):
     input()
 
 def print_player_score(jogador):
-    print(f"Pontuação de {jogador['nome']}: {jogador['pontuacao']}")
+    print(f"Pontuação de {jogador_vencedor['cor']+jogador['nome']}: {jogador['pontuacao']}")
 
 def alternativa_pergunta_slafodase(alternativa_certa, jogador):
     decisao = input(estilo.RESET_ALL)
     print_bonito("E a resposta está...........\n")
     if decisao == alternativa_certa:
         jogador['pontuacao'] += pontos_totais
-        print_bonito(cor.GREEN+"Correta\n"+estilo.RESET_ALL)
+        print_bonito(cor.GREEN+"Correto\n"+estilo.RESET_ALL)
     else:
         print_bonito(cor.RED+"Errada\n"+estilo.RESET_ALL)
         if rolar_dado == 0:
