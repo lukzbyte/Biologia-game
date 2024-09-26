@@ -1,0 +1,274 @@
+import time
+import os
+import sys
+import random
+from colorama import Fore as cor, Style as estilo
+
+
+sys.set_int_max_str_digits(10000000)
+
+cores_aleatorias = [cor.BLACK, cor.BLUE, cor.RED, cor.GREEN, cor.YELLOW, cor.CYAN, cor.MAGENTA]
+
+def print_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+
+def input_bonito(texto, delay=0.001):
+    for letra in texto:
+        print(letra, end='', flush=True)
+        time.sleep(delay)
+    input()
+
+def print_player_score(jogador):
+    print(f"Pontuação de {jogador['nome']}: {jogador['pontuacao']}")
+
+def alternativa_pergunta_slafodase(alternativa_certa, jogador):
+    decisao = input(estilo.RESET_ALL)
+    print_bonito("E a resposta está...........\n")
+    if decisao == alternativa_certa:
+        jogador['pontuacao'] += pontos_totais
+        print_bonito(cor.GREEN+"Correta\n"+estilo.RESET_ALL)
+    else:
+        print_bonito(cor.RED+"Errada\n"+estilo.RESET_ALL)
+        if rolar_dado == 0:
+            pontos_totais /= 2
+            jogador['pontuacao'] += pontos_totais
+
+jogadores_participando = []
+jogo_ativado = 1
+
+biologia_titulo = ("""
+   ____ ___ ___  _     ___   ____ ___    _      
+  | __ )_ _/ _ \| |   / _ \ / ___|_ _|  / \     
+  |  _ \| | | | | |  | | | | |  _ | |  / _ \    
+  | |_) | | |_| | |__| |_| | |_| || | / ___ \   
+ _|____/___\___/|_____\___/ \____|___/_/_ _\_\_ 
+|_   _| | | | ____|  / ___|  / \  |  \/  | ____|
+  | | | |_| |  _|   | |  _  / _ \ | |\/| |  _|  
+  | | |  _  | |___  | |_| |/ ___ \| |  | | |___ 
+  |_| |_| |_|_____|  \____/_/   \_\_|  |_|_____|""")
+facil_texto = (""" _____ __       _ _ 
+|  ___/_/_  ___(_) |
+| |_ / _` |/ __| | |
+|  _| (_| | (__| | |
+|_|  \__,_|\___|_|_|""")
+medio_texto = (""" __  __   __     _ _       
+|  \/  | /_/  __| (_) ___  
+| |\/| |/ _ \/ _` | |/ _ \ 
+| |  | |  __/ (_| | | (_) |
+|_|  |_|\___|\__,_|_|\___/ """)
+dificil_texto = (""" ____  _  __ __     _ _ 
+|  _ \(_)/ _/_/ ___(_) |
+| | | | | |_| |/ __| | |
+| |_| | |  _| | (__| | |
+|____/|_|_| |_|\___|_|_|""")
+regras_texto = ("""
+ ____                          
+|  _ \ ___  __ _ _ __ __ _ ___ 
+| |_) / _ \/ _` | '__/ _` / __|
+|  _ <  __/ (_| | | | (_| \__ 
+|_| \_\___|\__, |_|  \__,_|___/
+           |___/               """)
+
+
+while jogo_ativado == 1:
+    os.system('cls')
+    print(cor.LIGHTGREEN_EX+biologia_titulo,"\n")
+    input("               Pressione Enter")
+    while True:
+        jogadores_participando.clear()
+        os.system('cls')
+        print_bonito(estilo.RESET_ALL+"Quantos jogadores vai jogar (max. 7)?\n")
+        qnt_de_jogadores = input()
+
+        if qnt_de_jogadores.isdigit() and 1 <= int(qnt_de_jogadores) <= 7:
+            for i in range(int(qnt_de_jogadores)):
+                print_bonito(f"Digite o nome do jogador {i+1}: ")
+                jogador_nome = input()
+                entrada = random.randint(1,7)
+                cor_jogador = random.choice(cores_aleatorias)
+                pontuacao = 0
+
+                while any(jogador['entrada'] == entrada for jogador in jogadores_participando):
+                    entrada = random.randint(1,7)
+
+                while any(jogador['cor'] == cor_jogador for jogador in jogadores_participando):
+                    cor_jogador = random.choice(cores_aleatorias)
+
+                jogador = {'nome': jogador_nome, 'entrada': entrada, 'cor':cor_jogador, 'pontuacao':pontuacao}
+                jogadores_participando.append(jogador)
+            os.system('cls')
+            for jogador in jogadores_participando:
+                print(jogador['cor']+f"Jogador: {jogador['nome']} |Sua rodada: {jogador['entrada']}" + estilo.RESET_ALL)
+            print_bonito("\nOs dados estão corretos?\n")
+            print_bonito(cor.YELLOW+("(1. Sim) (2. Não)\n"))
+            decisao = input(estilo.RESET_ALL)
+            if decisao == "1":
+                break
+                
+                
+            
+        else:
+            input_bonito("Inválido, coloque as quantidade de jogadores novamente (Pressione Enter)")
+            os.system('cls')
+    jogadores_participando = sorted(jogadores_participando, key=lambda x: x['entrada'])
+    gameplay = 1
+
+    os.system('cls')
+    print_bonito(f"{cor.CYAN+regras_texto}\n")
+    print_bonito(estilo.RESET_ALL+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
+    print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
+    input_bonito(f"\nPerguntas {cor.GREEN +"Fáceis"+ estilo.RESET_ALL} = 2 pontos\nPerguntas {cor.YELLOW +"Médias"+ estilo.RESET_ALL} = 4 pontos\nPerguntas {cor.RED +"Difíceis"+ estilo.RESET_ALL} = 6 pontos\n(Pressione Enter)")
+    rodadas = 1
+    while gameplay == 1:
+        for jogador in jogadores_participando:
+            os.system('cls')
+            rolar_dado = 0
+            selecao_de_dificuldade = random.randint(1,4)
+            print_bonito(f"A pergunta sorteada possui dificuldade.............\n")
+            if selecao_de_dificuldade == 1:
+                print(f"{cor.GREEN +facil_texto+ estilo.RESET_ALL}\n")
+                pontos_totais = 2
+            elif  selecao_de_dificuldade == 2 or selecao_de_dificuldade == 4:
+                print(f"{cor.YELLOW +medio_texto+ estilo.RESET_ALL}\n")
+                selecao_de_dificuldade = 2
+                pontos_totais = 4
+            elif selecao_de_dificuldade == 3:
+                print(f"{cor.RED +dificil_texto+ estilo.RESET_ALL}\n")
+                pontos_totais = 6
+
+            print_bonito(f"Você, jogador {jogador['cor']+jogador['nome'] + estilo.RESET_ALL}, gostaria de rolar um dado para multiplicar seu ganho de pontos?\n")
+            print_bonito(cor.YELLOW+"(1. Sim) (2. Não)\n")
+            decisao = input(estilo.RESET_ALL)
+            os.system('cls')
+            if decisao == "1":
+                rolar_dado = random.randint(1,6)
+                pontos_totais *= rolar_dado
+                print_bonito(f"O jogador {jogador['cor']+jogador['nome'] + estilo.RESET_ALL} Rolou um {rolar_dado}\n")
+            input_bonito(f"O jogador pode ganhar até {pontos_totais} pontos")
+            os.system('cls')
+            
+            if selecao_de_dificuldade == 1:
+                selecao_de_perguntas = random.randint(1, 10) # variavel pra escolher a pergunta
+                prevencao_de_pergunta_ingual_facil = []
+                while True:
+                    if selecao_de_perguntas in prevencao_de_pergunta_ingual_facil:
+                        selecao_de_perguntas = random.randint(1, 10)
+                    else:
+                        prevencao_de_pergunta_ingual_facil.append(selecao_de_perguntas)
+                        break
+                contar_vetor = len(prevencao_de_pergunta_ingual_facil)
+                if contar_vetor == 10:
+                    prevencao_de_pergunta_ingual_facil.clear()
+            elif  selecao_de_dificuldade == 2:
+                selecao_de_perguntas = random.randint(1, 15) # variavel pra escolher a pergunta
+                prevencao_de_pergunta_ingual_medio = []
+                while True:
+                    if selecao_de_perguntas in prevencao_de_pergunta_ingual_medio:
+                        selecao_de_perguntas = random.randint(1, 15)
+                    else:
+                        prevencao_de_pergunta_ingual_medio.append(selecao_de_perguntas)
+                        break
+                contar_vetor = len(prevencao_de_pergunta_ingual_medio)
+                if contar_vetor == 15:
+                    prevencao_de_pergunta_ingual_medio.clear()
+            elif  selecao_de_dificuldade == 3:
+                selecao_de_perguntas = random.randint(1, 15) # variavel pra escolher a pergunta
+                prevencao_de_pergunta_ingual_dificil = []
+                while True:
+                    if selecao_de_perguntas in prevencao_de_pergunta_ingual_dificil:
+                        selecao_de_perguntas = random.randint(1, 15)
+                    else:
+                        prevencao_de_pergunta_ingual_dificil.append(selecao_de_perguntas)
+                        break
+                contar_vetor = len(prevencao_de_pergunta_ingual_dificil)
+                if contar_vetor == 15:
+                    prevencao_de_pergunta_ingual_dificil.clear()
+
+            if selecao_de_dificuldade == 1:
+                if selecao_de_perguntas == 1:
+                    print_bonito(estilo.RESET_ALL+"O que são briofitas?\n")
+                    print_bonito(cor.YELLOW+"(1. Plantas não vasculares, como musgos e hepáticas.) \n(2. Plantas vasculares que se reproduzem por esporos, como samambaias.)  \n(3. Plantas vasculares que produzem sementes expostas, como pinheiros.)\n")
+                    alternativa_certa = "1"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                    
+                elif selecao_de_perguntas == 2:
+                    print_bonito(estilo.RESET_ALL+"Quais são os principais exemplos de briofitas?\n")
+                    print_bonito(cor.YELLOW+"(1. Samambaias, avencas e licófitas.) \n(2.  Musgos, hepáticas e antóceros.)  \n(3. Coníferas, cicadófitas e ginkgo.)\n")
+                    alternativa_certa = "2"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 3:
+                    print_bonito(estilo.RESET_ALL+"Como as gimnospermas se reproduzem?\n")
+                    print_bonito(cor.YELLOW+"(1. Através de sementes formadas em cones.) \n(2. Através da polinização e formação de frutos.)  \n(3. Por meio de esporos produzidos em esporângios.)\n")
+                    alternativa_certa = "1"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 4:
+                    print_bonito(estilo.RESET_ALL+"As briofitas possuem raízes verdadeiras?\n")
+                    print_bonito(cor.YELLOW+"(1. Sim, possuem raízes verdadeiras que ajudam na absorção de água e nutrientes.) \n(2. Não, pois ela não precisa de nutrientes)  \n(3. Não, elas têm estruturas chamadas rizóides que não absorvem água como raízes verdadeiras.)\n")
+                    alternativa_certa = "3"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 5:
+                    print_bonito(estilo.RESET_ALL+"Qual é o papel das flores nas angiospermas?\n")
+                    print_bonito(cor.YELLOW+"(1. Para armazenar água da chuva e fazer fotossíntese) \n(2. Para criar frutos)  \n(3. Atraem polinizadores e facilitam a reprodução.)\n")
+                    alternativa_certa = "3"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 6:
+                    print_bonito(estilo.RESET_ALL+"O que são angiospermas?\n")
+                    print_bonito(cor.YELLOW+"(1. Organismos unicelulares que habitam ambientes aquáticos.) \n(2. Vegetais que não possuem flores e frutos.)  \n(3. Plantas vasculares que produzem sementes nuas.)\n")
+                    alternativa_certa = "3"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 7:
+                    print_bonito(estilo.RESET_ALL+"Como as angiospermas se reproduzem?\n")
+                    print_bonito(cor.YELLOW+"(1. Exclusivamente por reprodução assexuada.) \n(2. Através da polinização e formação de frutos.)  \n(3. Por meio de esporos, como os fetos.)\n")
+                    alternativa_certa = "2"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 8:
+                    print_bonito(estilo.RESET_ALL+"O que é a polinização e por que é importante para as angiospermas?\n")
+                    print_bonito(cor.YELLOW+"(1. Transferência de pólen de uma flor para outra, essencial para a reprodução.) \n(2. É a produção de hormônios vegetais que regulam o crescimento.)  \n(3. É o processo de formação do solo a partir da decomposição de matéria orgânica.)\n")
+                    alternativa_certa = "1"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 9:
+                    print_bonito(estilo.RESET_ALL+"Quais são os principais exemplos de pteridófitas?\n")
+                    print_bonito(cor.YELLOW+"(1. Coníferas, cicadófitas e ginkgo.) \n(2. Samambaias, avencas e licófitas.)  \n(3. Musgos, hepáticas e antóceros.)\n")
+                    alternativa_certa = "2"
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                elif selecao_de_perguntas == 10:
+                    print_bonito(estilo.RESET_ALL+"As pteridófitas têm raízes verdadeiras?\n")
+                    print_bonito(cor.YELLOW+"(1. Sim, possuem raízes verdadeiras que ajudam na absorção de água e nutrientes.) \n(2. Sim, mas suas raízes são muito pequenas e não absorvem água.)  \n(3. Não, possuem rizóides que não possuem vasos condutores.)\n")
+                    alternativa_certa = ""
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                
+
+
+
+            elif  selecao_de_dificuldade == 2:
+                if selecao_de_perguntas == :
+                    print_bonito(estilo.RESET_ALL+"\n")
+                    print_bonito(cor.YELLOW+"(1. ) \n(2. )  \n(3. )\n(4. )\n")
+                    alternativa_certa = 
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                
+
+            elif selecao_de_dificuldade == 3:
+                if selecao_de_perguntas == :
+                    print_bonito(estilo.RESET_ALL+"\n")
+                    print_bonito(cor.YELLOW+"(1. ) \n(2. )  \n(3. )\n(4. )\n(5. )\n")
+                    alternativa_certa = 
+                    alternativa_pergunta_slafodase(alternativa_certa, jogador)
+                
+            print_bonito(f"O jogador {jogador['nome']} possui {jogador['pontuacao']}\n")
+            input("Pressione Enter para continuar")
+            os.system('cls')
+        for jogador in jogadores_participando:
+            print_player_score(jogador)
+            if rodadas == 5:
+                os.system('cls')
+                jogadores_participando.sort(key=lambda x: x['pontuacao'], reverse=True)
+                jogador_vencedor = jogadores_participando[0]
+                print_bonito(f"Parabéns {jogador_vencedor['cor']+jogador_vencedor['nome'] + estilo.RESET_ALL}! \nVocê venceu o jogo com {jogador_vencedor['pontuacao']} pontos!\n\n")
+                print_bonito("Pontuação final:\n")
+                print_player_score(jogador)
+                gameplay = 0
+        rodadas += 1
+        input()
