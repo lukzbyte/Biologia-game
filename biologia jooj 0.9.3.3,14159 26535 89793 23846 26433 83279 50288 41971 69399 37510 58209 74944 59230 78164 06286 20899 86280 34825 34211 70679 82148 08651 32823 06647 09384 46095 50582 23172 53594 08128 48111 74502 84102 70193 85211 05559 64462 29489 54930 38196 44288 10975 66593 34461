@@ -245,7 +245,7 @@ while jogo_ativado == 1:
             elif  selecao_de_dificuldade == 2:
                 if selecao_de_perguntas == :
                     print_bonito(estilo.RESET_ALL+"\n")
-                    print_bonito(cor.YELLOW+"(1. ) \n(2. )  \n(3. )\n(4. )\n")
+                    print_bonito(cor.YELLOW+"(1. )\n(2. )\n(3. )\n(4. )\n")
                     alternativa_certa = ""
                     alternativa_pergunta_slafodase(alternativa_certa, jogador)
                 
@@ -253,7 +253,7 @@ while jogo_ativado == 1:
             elif selecao_de_dificuldade == 3:
                 if selecao_de_perguntas == :
                     print_bonito(estilo.RESET_ALL+"\n")
-                    print_bonito(cor.YELLOW+"(1. ) \n(2. )  \n(3. )\n(4. )\n(5. )\n")
+                    print_bonito(cor.YELLOW+"(1. )\n(2. )\n(3. )\n(4. )\n(5. )\n")
                     alternativa_certa = ""
                     alternativa_pergunta_slafodase(alternativa_certa, jogador)
                 
