@@ -127,9 +127,10 @@ while jogo_ativado == 1:
     print_bonito(f"{cores['ciano']+regras_texto}\n")
     print_bonito(cores['reset']+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
     print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
-    print_bonito({cores['verde'] +"Perguntas Fáceis = 2 pontos"+ cores['reset']})
-    print_bonito({cores["amarelo"] +"Perguntas Médias = 4 pontos" + cores['reset']})
-    input_bonito({cores['vermelho'] +" Perguntas Difíceis = 6 pontos\n(Pressione Enter)" + cores['reset']})
+    print_bonito({cores['verde'] +"Perguntas Fáceis = 2 pontos/n"+ cores['reset']})
+    print_bonito({cores["amarelo"] +"Perguntas Médias = 4 pontos/n" + cores['reset']})
+    print_bonito({cores['vermelho'] +" Perguntas Difíceis = 6 pontos/n" + cores['reset']})
+    input_bonito(cores['reset']+"(Pressione Enter)")
     
     rodadas = 1
     while gameplay == 1:
