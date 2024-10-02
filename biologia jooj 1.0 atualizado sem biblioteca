@@ -4,8 +4,6 @@ import sys
 import random
 
 
-sys.set_int_max_str_digits(10000000)
-
 cores = {
     'preto': '\033[30m',
     'vermelho': '\033[31m',
@@ -129,7 +127,10 @@ while jogo_ativado == 1:
     print_bonito(f"{cores['ciano']+regras_texto}\n")
     print_bonito(cores['reset']+"Cada jogador irá sortear leatoriamente uma pergunta facil, média e difícil \nE então o jogador poderá decidir se vai rolar um dado para multiplicar seus pontos que serão ganhos\n")
     print_bonito("Se o jogador optar por rolar o dado e errar a pergunta, ele não ganhará nenhum ponto, caso contrário ganhará apenas metade dos pontos \nO objetivo é conseguir o máximo de pontos em até 5 rodadas\n")
-    input_bonito(f"\nPerguntas {cores['verde'] +"Fáceis"+ cores['reset']} = 2 pontos\nPerguntas {cores["amarelo"] +"Médias"+ cores['reset']} = 4 pontos\nPerguntas {cores['vermelho'] +"Difíceis"+ cores['reset']} = 6 pontos\n(Pressione Enter)")
+    print_bonito({cores['verde'] +"Perguntas Fáceis = 2 pontos"+ cores['reset']})
+    print_bonito({cores["amarelo"] +"Perguntas Médias = 4 pontos" + cores['reset']})
+    input_bonito({cores['vermelho'] +" Perguntas Difíceis = 6 pontos\n(Pressione Enter)" + cores['reset']})
+    
     rodadas = 1
     while gameplay == 1:
         for jogador in jogadores_participando:
@@ -141,7 +142,7 @@ while jogo_ativado == 1:
                 print(f"{cores['verde'] +facil_texto+ cores['reset']}\n")
                 pontos_totais = 2
             elif  selecao_de_dificuldade == 2 or selecao_de_dificuldade == 4:
-                print(f"{cores["amarelo"] +medio_texto+ cores['reset']}\n")
+                print(f"{cores['amarelo'] +medio_texto+ cores['reset']}\n")
                 selecao_de_dificuldade = 2
                 pontos_totais = 4
             elif selecao_de_dificuldade == 3:
